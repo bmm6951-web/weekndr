@@ -1,26 +1,28 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Weekndr brand palette: soft cream, light blue, navy */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: #f8f3ea;
+  --color-cream-dark: #efe6d6;
+  --color-sky: #cfe0ec;
+  --color-sky-deep: #9dbcd4;
+  --color-navy: #16233f;
+  --color-navy-soft: #2c3b5c;
+
+  --font-serif: var(--font-cormorant), "Georgia", serif;
+  --font-sans: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-navy);
+}
+
+::selection {
+  background: var(--color-sky);
+  color: var(--color-navy);
 }
