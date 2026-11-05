@@ -1,14 +1,16 @@
 import { Pool } from "pg";
 import bcrypt from "bcryptjs";
 
-// Vercel's Neon integration provides DATABASE_URL (POSTGRES_URL on some setups).
-const connectionString = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+// WEEKNDR_DATABASE_URL is the Neon connection string added by hand in Vercel;
+// DATABASE_URL / POSTGRES_URL come from Vercel's Neon integration if it's connected.
+const connectionString =
+  process.env.WEEKNDR_DATABASE_URL ?? process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
 
 const globalForDb = globalThis as unknown as { pool?: Pool; schemaReady?: Promise<void> };
 
 function getPool() {
   if (!connectionString) {
-    throw new Error("DATABASE_URL is not set. Connect a Neon database in Vercel.");
+    throw new Error("No database configured. Set WEEKNDR_DATABASE_URL in Vercel.");
   }
   if (!globalForDb.pool) {
     const isLocal = /localhost|127\.0\.0\.1/.test(connectionString);
