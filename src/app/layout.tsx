@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Caveat, Cormorant_Garamond, DM_Mono, Jost } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -15,10 +15,22 @@ const jost = Jost({
   weight: ["300", "400", "500"],
 });
 
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["500", "700"],
+});
+
+const dmMono = DM_Mono({
+  variable: "--font-dm-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
   title: "weekndr. | Your semester abroad, all in one place",
   description:
-    "Weekndr helps college students studying abroad plan their weekends, discover destinations, and stay on budget, all in one place. Created by Bhavya Mudduluri.",
+    "Weekndr turns your study abroad academic calendar into a personalized, weekend-by-weekend travel plan. Built for college students spending a semester in Europe. Created by Bhavya Mudduluri.",
 };
 
 export default function RootLayout({
@@ -28,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${jost.variable} font-sans antialiased`}>
+      <body
+        className={`${cormorant.variable} ${jost.variable} ${caveat.variable} ${dmMono.variable} font-sans antialiased`}
+      >
         {children}
       </body>
     </html>

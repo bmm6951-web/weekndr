@@ -1,223 +1,302 @@
+import Link from "next/link";
 import Photo from "@/components/Photo";
-
-const FOUNDER = "Bhavya Mudduluri";
+import PricingCards from "@/components/PricingCards";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { getCurrentUser } from "@/lib/auth";
 
 // Photos are from Unsplash (free to use under the Unsplash License).
 const unsplash = (id: string, width = 1400) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=75`;
 
 const photos = {
-  heroMain: unsplash("1502602898657-3e91760cbb34", 1200), // Paris
-  heroSmall: unsplash("1523906834658-6e24ef2386f9", 800), // Venice
+  hero: unsplash("1502602898657-3e91760cbb34", 1200), // Paris
   plan: unsplash("1488646953014-85cb44e25828"), // map and travel planning
-  discover: unsplash("1552832230-c0197dd311b5"), // Rome
-  budget: unsplash("1513635269975-59663e0ac1ad"), // London
-  comingSoon: unsplash("1476514525535-07fb3b4ae5f1", 2000), // Swiss lake
+  discover: unsplash("1523906834658-6e24ef2386f9"), // Venice
+  budget: unsplash("1552832230-c0197dd311b5"), // Rome
 };
 
-const cities = [
-  "Paris",
-  "Florence",
-  "Barcelona",
-  "Lisbon",
-  "Amsterdam",
-  "Prague",
-  "Copenhagen",
-  "Vienna",
+const cities = ["BCN", "LIS", "PAR", "AMS", "PRG", "FLR", "CPH", "VIE", "DUB", "ATH"];
+
+const tabs = [
+  "cheap flights bcn to ???",
+  "is lisbon worth it for a weekend",
+  "hostels prague under €30",
+  "spring break europe ideas reddit",
+  "ryanair baggage rules 2027",
+  "when is my midterm again",
+  "group chat: where r we going",
+];
+
+const steps = [
+  {
+    n: "01",
+    title: "Upload your calendar",
+    body: "Drop in your program's academic calendar or syllabus as a PDF, or paste the dates. Weekndr's AI reads it and spots exams, breaks, and required program trips.",
+  },
+  {
+    n: "02",
+    title: "Tell us your budget & vibe",
+    body: "Where you're living, what you can spend per trip, and what you love: beaches, museums, food markets, nightlife, hikes.",
+  },
+  {
+    n: "03",
+    title: "Get every weekend planned",
+    body: "A boarding pass for every weekend: where to go, why it fits you, how to get there, and what it'll cost. Saved to your account.",
+  },
+];
+
+const sample = [
+  { wk: "01", date: "Jan 16–18", place: "Barcelona", note: "settle in, Gothic Quarter + Bunkers sunset", tag: "Home base", cost: "€40" },
+  { wk: "02", date: "Jan 23–25", place: "Valencia", note: "paella where it was invented", tag: "Trip", cost: "€130" },
+  { wk: "05", date: "Feb 13–15", place: "Lisbon", note: "pastéis & sunset trams", tag: "Trip", cost: "€175" },
+  { wk: "07", date: "Feb 27–Mar 1", place: "Program trip", note: "required Madrid excursion", tag: "Blocked", cost: "€0" },
+  { wk: "10", date: "Mar 27–Apr 5", place: "Amalfi + Rome", note: "spring break: go big", tag: "Long weekend", cost: "€420" },
+  { wk: "14", date: "Apr 24–26", place: "Mallorca", note: "beach weekend before finals", tag: "Trip", cost: "€150" },
 ];
 
 const features = [
   {
-    number: "01",
     title: "Plan Your Semester",
-    body: "See every free weekend of your semester at a glance, from your first week abroad to your final exams, so you can map out where you want to go before the best trips fill up.",
+    body: "Every weekend from arrival to finals, mapped out at once, so you book early, skip the bad weekends, and never waste a free one.",
     photo: photos.plan,
     alt: "A map, camera, and travel notebook laid out for trip planning",
   },
   {
-    number: "02",
     title: "Discover Your Next Destination",
-    body: "Find cities worth the train ride. Weekndr will suggest destinations based on where you're studying, what you love, and how much time you have.",
+    body: "Recommendations matched to your interests, the season, and how far you can get from your home base, not a generic top-10 list.",
     photo: photos.discover,
-    alt: "The Colosseum in Rome under a clear sky",
+    alt: "Gondolas on a canal in Venice",
   },
   {
-    number: "03",
     title: "Stay on Budget",
-    body: "Studying abroad shouldn't mean coming home broke. Keep travel costs organized trip by trip, so you can say yes to more weekends without the guesswork.",
+    body: "Estimated costs for transport, beds, and food on every trip, plus money tips, so you can say yes to more weekends.",
     photo: photos.budget,
-    alt: "Westminster and the River Thames in London",
+    alt: "The Colosseum in Rome under a clear sky",
   },
 ];
 
-const roadmap = [
-  { title: "Semester calendar", body: "Every available weekend, in one view." },
-  { title: "Trip planner", body: "Organize cities, dates, and details." },
-  { title: "Budget tracker", body: "Track travel spending as you go." },
-  { title: "AI recommendations", body: "Personalized destination ideas." },
-  { title: "Travel with friends", body: "Plan trips together in one place." },
-];
+export default async function Home() {
+  const user = await getCurrentUser();
 
-export default function Home() {
   return (
-    <main className="overflow-x-hidden">
-      {/* Navigation */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 md:px-10">
-        <a href="#" className="font-serif text-3xl font-semibold tracking-tight">
-          weekndr<span className="text-sky-deep">.</span>
-        </a>
-        <nav className="hidden items-center gap-10 text-sm tracking-wide text-navy-soft md:flex">
-          <a href="#about" className="transition-colors hover:text-navy">About</a>
-          <a href="#features" className="transition-colors hover:text-navy">Features</a>
-          <a href="#coming-soon" className="transition-colors hover:text-navy">Coming Soon</a>
-        </nav>
-        <span className="rounded-full border border-navy/15 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-navy-soft">
-          Coming soon
-        </span>
-      </header>
+    <div className="overflow-x-hidden">
+      <SiteHeader user={user} />
 
-      {/* Hero */}
-      <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 pb-20 pt-8 md:grid-cols-2 md:px-10 md:pb-28 md:pt-14">
-        <div>
-          <p className="mb-6 text-xs uppercase tracking-[0.3em] text-navy-soft">
-            Semester planning for students abroad
-          </p>
-          <h1 className="font-serif text-5xl leading-[1.05] font-medium sm:text-6xl lg:text-7xl">
-            Your semester abroad, <em className="text-navy-soft">all in one place.</em>
-          </h1>
-          <p className="mt-8 max-w-md text-lg leading-relaxed font-light text-navy-soft">
-            Weekndr helps college students studying abroad plan every free
-            weekend, discover new cities, and keep travel spending on track, so
-            no weekend goes to waste.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <a
-              href="#features"
-              className="rounded-full bg-navy px-7 py-3.5 text-sm tracking-wide text-cream transition hover:bg-navy-soft"
-            >
-              Explore Weekndr
-            </a>
-            <a
-              href="#coming-soon"
-              className="rounded-full border border-navy/20 px-7 py-3.5 text-sm tracking-wide transition hover:border-navy/50"
-            >
-              See what&apos;s coming
-            </a>
-          </div>
-          <p className="mt-12 text-sm text-navy-soft">
-            Founded by <span className="font-medium text-navy">{FOUNDER}</span>
-          </p>
-        </div>
-
-        <div className="relative mx-auto w-full max-w-md md:max-w-none">
-          <Photo
-            src={photos.heroMain}
-            alt="The Eiffel Tower in Paris seen from a quiet street"
-            className="aspect-[4/5] w-full rounded-t-[999px] rounded-b-3xl shadow-2xl shadow-navy/10"
-          />
-          <Photo
-            src={photos.heroSmall}
-            alt="Gondolas on a canal in Venice"
-            tone="navy"
-            className="absolute -bottom-8 -left-4 aspect-square w-36 rounded-2xl border-[6px] border-cream shadow-xl sm:w-44 md:-left-12"
-          />
-          <div className="absolute -right-2 top-10 rounded-2xl bg-cream px-5 py-4 shadow-lg shadow-navy/10 sm:-right-6">
-            <p className="font-serif text-2xl italic">Bonjour, Paris</p>
-            <p className="text-xs uppercase tracking-[0.2em] text-navy-soft">Weekend 04</p>
-          </div>
-        </div>
-      </section>
-
-      {/* City strip */}
-      <div className="border-y border-navy/10 bg-sky/50">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-8 gap-y-2 px-6 py-5 text-center sm:flex sm:flex-wrap sm:justify-center font-serif text-xl italic text-navy-soft md:justify-between md:px-10">
-          {cities.map((city) => (
-            <span key={city}>{city}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* About */}
-      <section id="about" className="mx-auto max-w-3xl px-6 py-24 text-center md:py-32">
-        <p className="mb-6 text-xs uppercase tracking-[0.3em] text-navy-soft">Why Weekndr</p>
-        <h2 className="font-serif text-4xl leading-tight font-medium md:text-5xl">
-          Fourteen weekends. A whole continent. One plan.
-        </h2>
-        <p className="mt-8 text-lg leading-relaxed font-light text-navy-soft">
-          A semester abroad goes by fast. Between classes, group chats, and
-          a dozen open browser tabs, planning trips gets messy. Weekndr is built
-          for college students abroad who want one calm, organized place to plan
-          their weekends, choose where to go next, and travel smarter with
-          friends.
-        </p>
-      </section>
-
-      {/* Features */}
-      <section id="features" className="mx-auto max-w-6xl space-y-24 px-6 pb-28 md:space-y-32 md:px-10">
-        {features.map((feature, i) => (
-          <article key={feature.title} className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
-            <Photo
-              src={feature.photo}
-              alt={feature.alt}
-              tone={i === 1 ? "cream" : "sky"}
-              className={`aspect-[4/3] w-full rounded-3xl ${i % 2 === 1 ? "md:order-2" : ""}`}
-            />
-            <div className={i % 2 === 1 ? "md:order-1" : ""}>
-              <p className="font-serif text-6xl lining-nums text-sky-deep">{feature.number}</p>
-              <h3 className="mt-4 font-serif text-4xl font-medium md:text-5xl">{feature.title}</h3>
-              <div className="my-6 h-px w-16 bg-navy/30" />
-              <p className="max-w-md text-lg leading-relaxed font-light text-navy-soft">{feature.body}</p>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      {/* Coming Soon */}
-      <section id="coming-soon" className="relative isolate overflow-hidden bg-navy text-cream">
-        <Photo
-          src={photos.comingSoon}
-          alt="A calm alpine lake in Switzerland"
-          tone="navy"
-          className="absolute inset-0 -z-10 opacity-25"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy/70 to-navy" />
-        <div className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
-          <p className="mb-6 text-xs uppercase tracking-[0.3em] text-sky">Coming soon</p>
-          <h2 className="max-w-2xl font-serif text-4xl leading-tight font-medium md:text-6xl">
-            Your next weekend away is <em>almost here.</em>
-          </h2>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed font-light text-cream/80">
-            Weekndr is currently in development. Here&apos;s what we&apos;re building
-            for students heading abroad:
-          </p>
-          <ul className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-cream/15 sm:grid-cols-2 lg:grid-cols-5">
-            {roadmap.map((item) => (
-              <li key={item.title} className="bg-navy/80 p-6 backdrop-blur-sm">
-                <p className="font-serif text-2xl">{item.title}</p>
-                <p className="mt-2 text-sm font-light text-cream/70">{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-cream-dark">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-10">
+      <main>
+        {/* Hero */}
+        <section className="mx-auto grid max-w-6xl items-center gap-16 px-6 pb-24 pt-6 md:px-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
-            <p className="font-serif text-3xl font-semibold">
-              weekndr<span className="text-sky-deep">.</span>
+            <p className="font-hand text-3xl text-stamp">hola, future study abroad student!</p>
+            <h1 className="mt-2 font-serif text-5xl leading-[1.02] font-medium sm:text-6xl lg:text-[5.25rem]">
+              Your semester abroad, <em className="text-navy-soft">all in one place.</em>
+            </h1>
+            <p className="mt-8 max-w-lg text-lg leading-relaxed font-light text-navy-soft">
+              Upload your academic calendar and Weekndr&apos;s AI plans every free weekend of your semester: where to
+              go, why it fits you, and what it&apos;ll cost. Built for college students studying abroad in Europe.
             </p>
-            <p className="mt-2 text-sm text-navy-soft">Your semester abroad, all in one place.</p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link href={user ? "/plan/new" : "/signup"} className="btn-primary">
+                Plan my semester free →
+              </Link>
+              <a href="#how-it-works" className="btn-ghost">See how it works</a>
+            </div>
+            <p className="mt-10 text-sm text-navy-soft">
+              Founded by <span className="font-medium text-navy">Bhavya Mudduluri</span> · Penn State
+            </p>
           </div>
-          <div className="text-sm text-navy-soft md:text-right">
-            <p>
-              Created by <span className="font-medium text-navy">{FOUNDER}</span>
-            </p>
-            <p className="mt-1">Penn State · &copy; {new Date().getFullYear()} Weekndr</p>
+
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <Photo
+              src={photos.hero}
+              alt="The Eiffel Tower in Paris seen from a quiet street"
+              className="ml-auto aspect-[4/5] w-[85%] rounded-[2rem] shadow-2xl shadow-navy/10"
+            />
+            <span className="stamp absolute right-2 top-6 rotate-12 bg-cream/90 text-sm">Paris · Wknd 09</span>
+            <span className="stamp absolute right-16 top-28 -rotate-12 bg-cream/90 !border-navy !text-navy [box-shadow:inset_0_0_0_2px_var(--color-cream),inset_0_0_0_3px_var(--color-navy)]">
+              Approved
+            </span>
+
+            {/* Sample boarding pass */}
+            <div className="ticket absolute -bottom-10 left-0 w-[88%] -rotate-3 sm:w-80">
+              <div className="flex items-center justify-between bg-navy px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-cream">
+                <span>Weekndr pass</span>
+                <span>Sample</span>
+              </div>
+              <div className="flex items-end justify-between px-5 pt-4">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-navy-soft">From</p>
+                  <p className="font-serif text-4xl font-semibold">BCN</p>
+                </div>
+                <span className="mb-2 text-xl text-stamp">✈</span>
+                <div className="text-right">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-navy-soft">To</p>
+                  <p className="font-serif text-4xl font-semibold">LIS</p>
+                </div>
+              </div>
+              <p className="px-5 pb-4 font-hand text-xl text-stamp">pastéis &amp; sunset trams</p>
+              <div className="ticket-perf flex items-center justify-between gap-4 px-5 py-4">
+                <div className="font-mono text-[10px] uppercase leading-5 tracking-[0.15em] text-navy-soft">
+                  Wknd 05 · Feb 13–15
+                  <br />
+                  Est. €175 · fits your budget
+                </div>
+                <div className="barcode h-9 w-20 opacity-80" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Departures board */}
+        <div className="bg-navy py-4 text-cream">
+          <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-1 px-6 font-mono text-sm tracking-[0.3em] md:justify-between md:px-10">
+            {cities.map((code) => (
+              <span key={code}>
+                {code}
+                <span className="ml-6 hidden text-sky-deep md:inline">✈</span>
+              </span>
+            ))}
           </div>
         </div>
-      </footer>
-    </main>
+
+        {/* The problem */}
+        <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-24 md:px-10 md:py-32 lg:grid-cols-2">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-navy-soft">The problem</p>
+            <h2 className="mt-4 font-serif text-4xl leading-tight font-medium md:text-5xl">
+              Fourteen weekends. Fifty open tabs. <em>One group chat.</em>
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed font-light text-navy-soft">
+              A semester abroad flies by. Most students spend their first few weekends figuring out how to plan, then
+              realize half their free weekends are gone. Weekndr turns all of that research into one plan, in about a
+              minute.
+            </p>
+          </div>
+          <div className="relative">
+            <div className="space-y-2.5">
+              {tabs.map((t, i) => (
+                <div
+                  key={t}
+                  className="flex items-center gap-3 rounded-full border border-navy/10 bg-white/80 px-5 py-2.5 text-sm text-navy-soft line-through decoration-stamp/60 shadow-sm"
+                  style={{ marginLeft: `${(i % 3) * 1.5}rem` }}
+                >
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-navy/20" />
+                  {t}
+                </div>
+              ))}
+            </div>
+            <p className="absolute -bottom-12 right-0 -rotate-3 font-hand text-3xl text-stamp sm:-right-4">
+              → one plan. done.
+            </p>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section id="how-it-works" className="scroll-mt-8 bg-sky/50 py-24 md:py-32">
+          <div className="mx-auto max-w-6xl px-6 md:px-10">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-navy-soft">How it works</p>
+            <h2 className="mt-4 max-w-2xl font-serif text-4xl leading-tight font-medium md:text-5xl">
+              Your calendar in. Your whole semester out.
+            </h2>
+            <ol className="mt-14 grid gap-6 md:grid-cols-3">
+              {steps.map((s) => (
+                <li key={s.n} className="ticket p-8">
+                  <p className="font-mono text-sm text-stamp">{s.n}</p>
+                  <h3 className="mt-3 font-serif text-3xl">{s.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed font-light text-navy-soft">{s.body}</p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-20 flex flex-wrap items-end justify-between gap-4">
+              <h3 className="font-serif text-3xl">What a plan looks like</h3>
+              <p className="font-hand text-2xl text-stamp">a sample Barcelona semester ↓</p>
+            </div>
+            <div className="-mx-6 mt-6 flex snap-x gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:px-0">
+              {sample.map((s) => (
+                <div key={s.wk} className="ticket w-60 shrink-0 snap-start">
+                  <div
+                    className={`flex justify-between px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] ${
+                      s.tag === "Blocked" ? "bg-navy/10 text-navy-soft" : s.tag === "Long weekend" ? "bg-stamp text-cream" : s.tag === "Home base" ? "bg-sky text-navy" : "bg-navy text-cream"
+                    }`}
+                  >
+                    <span>Wknd {s.wk}</span>
+                    <span>{s.tag}</span>
+                  </div>
+                  <div className="p-4">
+                    <p className="font-mono text-[11px] text-navy-soft">{s.date}</p>
+                    <p className="mt-1 font-serif text-2xl">{s.place}</p>
+                    <p className="font-hand text-lg leading-tight text-stamp">{s.note}</p>
+                  </div>
+                  <div className="ticket-perf flex justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-navy-soft">
+                    <span>Est. cost</span>
+                    <span className="text-navy">{s.cost}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="mx-auto max-w-6xl px-6 py-24 md:px-10 md:py-32">
+          <div className="grid gap-8 md:grid-cols-3">
+            {features.map((f, i) => (
+              <article key={f.title}>
+                <Photo src={f.photo} alt={f.alt} tone={i === 1 ? "cream" : "sky"} className="aspect-[4/5] w-full rounded-t-[999px] rounded-b-3xl" />
+                <p className="mt-6 font-mono text-xs text-stamp">0{i + 1}</p>
+                <h3 className="mt-2 font-serif text-3xl font-medium">{f.title}</h3>
+                <p className="mt-3 leading-relaxed font-light text-navy-soft">{f.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Founder note */}
+        <section className="mx-auto max-w-3xl px-6 pb-24 md:pb-32">
+          <div className="relative rotate-1 rounded-3xl bg-white p-8 shadow-xl shadow-navy/10 md:p-12">
+            <span className="stamp absolute -top-4 right-8 bg-cream">Barcelona · Spring</span>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-navy-soft">Why I&apos;m building this</p>
+            <p className="mt-5 font-hand text-[1.75rem] leading-snug text-navy">
+              I&apos;m studying abroad in Barcelona next semester. When I started thinking about where to travel, I had no
+              idea where to begin: tabs everywhere, friends sending ideas, and no clue which weekends I&apos;d even be
+              free. You only get one semester abroad. I don&apos;t want to waste a single weekend, and I don&apos;t think
+              you should either.
+            </p>
+            <p className="mt-6 font-hand text-3xl text-stamp">— Bhavya Mudduluri, founder</p>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section id="pricing" className="bg-cream-dark/60 py-24 md:py-32">
+          <div className="mx-auto max-w-4xl px-6 md:px-10">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-navy-soft">Pricing</p>
+            <h2 className="mt-4 font-serif text-4xl leading-tight font-medium md:text-5xl">
+              Worth it by your first weekend.
+            </h2>
+            <p className="mb-12 mt-4 max-w-2xl text-lg font-light text-navy-soft">
+              One well-planned trip saves more than a month of Weekndr Plus. Start free; upgrade when you want to
+              re-plan as your semester changes.
+            </p>
+            <PricingCards user={user} />
+          </div>
+        </section>
+
+        {/* Coming soon */}
+        <section className="bg-navy text-cream">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-6 py-14 md:px-10">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-sky">Coming soon</p>
+              <p className="mt-2 font-serif text-3xl">Trip budgets & expense tracking · Plan trips with friends</p>
+            </div>
+            <Link href={user ? "/plan/new" : "/signup"} className="rounded-full bg-cream px-7 py-3.5 text-sm text-navy hover:bg-sky">
+              Plan my semester free →
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }
