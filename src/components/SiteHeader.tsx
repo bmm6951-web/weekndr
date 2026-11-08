@@ -21,7 +21,7 @@ export default function SiteHeader({ user }: { user: User | null }) {
           {user ? (
             <>
               <Link href="/dashboard" className={`${link} hidden sm:inline`}>My plans</Link>
-              {!user.is_paid && <Link href="/pricing" className={`${link} hidden sm:inline`}>Upgrade</Link>}
+              {!user.is_paid && <Link href="/pricing" className={`${link} !text-stamp`}>Upgrade</Link>}
               <Link href="/plan/new" className={link}>New plan</Link>
               <form action={logout}>
                 <button className={link}>Log out</button>

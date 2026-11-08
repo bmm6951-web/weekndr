@@ -28,11 +28,13 @@ export async function POST(request: Request) {
     homeCity: str("homeCity").slice(0, 100),
     startDate: str("startDate"),
     endDate: str("endDate"),
-    budgetPerTrip: Number(str("budgetPerTrip")),
+    totalBudget: Number(str("totalBudget")),
     currency: currency === "EUR" || currency === "GBP" ? currency : "USD",
     interests: form.getAll("interests").map(String).slice(0, 12),
     travelStyle: str("travelStyle").slice(0, 200) || "A balance of trips and weekends at home",
     calendarText: str("calendarText").slice(0, 20000),
+    mustSee: str("mustSee").slice(0, 1000),
+    leaveThursday: form.get("leaveThursday") === "on",
   };
   const other = str("otherInterests").slice(0, 300);
   if (other) input.interests.push(other);
@@ -41,8 +43,8 @@ export async function POST(request: Request) {
   if (!DATE_RE.test(input.startDate) || !DATE_RE.test(input.endDate) || input.endDate <= input.startDate) {
     return NextResponse.json({ error: "Please enter a valid semester start and end date." }, { status: 400 });
   }
-  if (!Number.isFinite(input.budgetPerTrip) || input.budgetPerTrip < 20 || input.budgetPerTrip > 5000) {
-    return NextResponse.json({ error: "Please enter a budget per trip between 20 and 5,000." }, { status: 400 });
+  if (!Number.isFinite(input.totalBudget) || input.totalBudget! < 100 || input.totalBudget! > 100000) {
+    return NextResponse.json({ error: "Please enter a total travel budget between 100 and 100,000." }, { status: 400 });
   }
 
   let pdfBase64: string | undefined;

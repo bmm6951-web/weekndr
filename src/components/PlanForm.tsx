@@ -81,16 +81,21 @@ export default function PlanForm() {
             <input id="endDate" name="endDate" type="date" className="field" required />
           </div>
           <div>
-            <label htmlFor="budgetPerTrip" className="label">Budget per trip</label>
+            <label htmlFor="totalBudget" className="label">Total travel budget</label>
             <div className="flex gap-2">
               <select name="currency" aria-label="Currency" className="field !w-24" defaultValue="EUR">
                 <option value="EUR">€ EUR</option>
                 <option value="USD">$ USD</option>
                 <option value="GBP">£ GBP</option>
               </select>
-              <input id="budgetPerTrip" name="budgetPerTrip" type="number" min={20} max={5000} className="field" placeholder="200" required />
+              <input id="totalBudget" name="totalBudget" type="number" min={100} max={100000} className="field" placeholder="2500" required />
             </div>
           </div>
+        </section>
+
+        <section>
+          <label htmlFor="mustSee" className="label">Must-see places</label>
+          <input id="mustSee" name="mustSee" className="field" placeholder="e.g. Amalfi Coast, Oktoberfest, the Northern Lights" />
         </section>
 
         <section>
@@ -121,6 +126,11 @@ export default function PlanForm() {
             ))}
           </div>
         </section>
+
+        <label className="flex cursor-pointer items-center gap-3 text-sm">
+          <input type="checkbox" name="leaveThursday" className="h-4 w-4 accent-stamp" />
+          Leave Thursday night (no Friday classes)
+        </label>
 
         <section className="rounded-sm border border-dashed border-navy/25 p-6">
           <p className="label">Your academic calendar</p>

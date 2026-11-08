@@ -1,12 +1,39 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import PrintButton from "@/components/PrintButton";
+import SemesterCalendar from "@/components/SemesterCalendar";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import type { PlanInput, PlanResult, PlanWeekend } from "@/lib/planner";
+import { flightLinks, groundLinks, stayLinks, type LinkItem } from "@/lib/links";
+import { withDates, type PlanInput, type PlanResult, type PlanWeekend } from "@/lib/planner";
 
 const SYMBOLS = { USD: "$", EUR: "€", GBP: "£" } as const;
+
+const shortDate = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+
+function LinkRow({ title, links }: { title: string; links: LinkItem[] }) {
+  return (
+    <div className="mt-3">
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-navy-soft">{title}</p>
+      <div className="mt-1.5 flex flex-wrap gap-1.5">
+        {links.map((l) => (
+          <a
+            key={l.label}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-navy/15 px-3 py-1 text-xs transition hover:border-stamp hover:text-stamp"
+          >
+            {l.label} ↗
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const TYPE_STYLES: Record<PlanWeekend["type"], { tag: string; bar: string; card: string }> = {
   trip: { tag: "Trip", bar: "text-navy-soft", card: "" },
@@ -26,7 +53,8 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
     [Number(id), user.id],
   );
   if (rows.length === 0) notFound();
-  const { input, result } = rows[0];
+  const { input } = rows[0];
+  const result = withDates(input, rows[0].result);
   const sym = SYMBOLS[input.currency] ?? "$";
   const money = (n: number) => `${sym}${Math.round(n).toLocaleString("en-US")}`;
   const trips = result.weekends.filter((w) => w.type === "trip" || w.type === "long_trip");
@@ -34,11 +62,18 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
 
   return (
     <>
-      <SiteHeader user={user} />
+      <div className="print:hidden">
+        <SiteHeader user={user} />
+      </div>
       <main className="mx-auto max-w-6xl px-6 pb-24 pt-6 md:px-10">
-        <Link href="/dashboard" className="font-mono text-xs uppercase tracking-[0.2em] text-navy-soft hover:text-navy">
-          ← All plans
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-4 print:hidden">
+          <Link href="/dashboard" className="font-mono text-xs uppercase tracking-[0.2em] text-navy-soft hover:text-navy">
+            ← All plans
+          </Link>
+          <a href="#calendar" className="font-mono text-xs uppercase tracking-[0.2em] text-stamp hover:underline">
+            Semester calendar ↓
+          </a>
+        </div>
         <header className="mt-6 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
             <p className="eyebrow">From {input.homeCity}</p>
@@ -62,8 +97,11 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
         <ol className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {result.weekends.map((w) => {
             const style = TYPE_STYLES[w.type] ?? TYPE_STYLES.trip;
+            const isTrip = w.type === "trip" || w.type === "long_trip";
+            const hasDates = Boolean(w.start_date && w.end_date);
+            const flies = w.transport_mode === "flight" && w.origin_airport && w.destination_airport;
             return (
-              <li key={w.index} className={`ticket flex flex-col ${style.card}`}>
+              <li key={w.index} className={`ticket flex break-inside-avoid flex-col ${style.card}`}>
                 <div className={`flex items-center justify-between border-b border-navy/10 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] ${style.bar}`}>
                   <span>Wknd {String(w.index).padStart(2, "0")}</span>
                   <span>{style.tag}</span>
@@ -91,6 +129,20 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
                   {w.cost_breakdown && <p className="mt-1 text-xs text-navy-soft">{w.cost_breakdown}</p>}
                   {w.tip && <p className="mt-3 border-l-2 border-stamp pl-3 text-xs leading-relaxed text-navy-soft">{w.tip}</p>}
                 </div>
+                {isTrip && hasDates && (
+                  <div className="ticket-perf px-6 pb-5 pt-4 print:hidden">
+                    {w.book_by && (
+                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-stamp">Book by {shortDate(w.book_by)}</p>
+                    )}
+                    {flies ? (
+                      <LinkRow title={`Flights ${w.origin_airport} → ${w.destination_airport}`} links={flightLinks(w.origin_airport!, w.destination_airport!, w.start_date!, w.end_date!)} />
+                    ) : (
+                      <LinkRow title="Getting there" links={groundLinks(input.homeCity, w.destination)} />
+                    )}
+                    {w.where_to_stay && <p className="mt-3 text-xs leading-relaxed text-navy-soft">{w.where_to_stay}</p>}
+                    <LinkRow title="Where to stay" links={stayLinks(w.destination, w.country, w.start_date!, w.end_date!)} />
+                  </div>
+                )}
               </li>
             );
           })}
@@ -106,11 +158,24 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
             </ul>
           </section>
         )}
-        <p className="mt-8 text-center text-xs text-navy-soft">
-          Costs and travel times are AI estimates. Check prices and schedules before booking.
+        <section id="calendar" className="mt-16 scroll-mt-8 break-before-page">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <h2 className="font-serif text-5xl md:text-6xl">your semester</h2>
+            <div className="flex flex-wrap gap-3 print:hidden">
+              <a href={`/plan/${id}/calendar`} className="btn-primary">Add to my calendar</a>
+              <PrintButton className="btn-ghost" />
+            </div>
+          </div>
+          <SemesterCalendar weekends={result.weekends} startDate={input.startDate} endDate={input.endDate} />
+        </section>
+
+        <p className="mt-12 text-center text-xs text-navy-soft">
+          Costs, travel times, and booking dates are AI estimates. Prices on the linked sites are live.
         </p>
       </main>
-      <SiteFooter />
+      <div className="print:hidden">
+        <SiteFooter />
+      </div>
     </>
   );
 }
