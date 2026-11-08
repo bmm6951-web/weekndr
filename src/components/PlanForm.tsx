@@ -130,7 +130,7 @@ export default function PlanForm() {
             type="file"
             accept="application/pdf"
             aria-label="Upload academic calendar PDF"
-            className="block w-full text-sm text-navy-soft file:mr-4 file:rounded-full file:border-0 file:bg-stamp file:px-5 file:py-2.5 file:text-sm file:text-cream hover:file:bg-oxblood"
+            className="block w-full text-sm text-navy-soft file:mr-4 file:rounded-full file:border-0 file:bg-stamp file:px-5 file:py-2.5 file:text-sm file:text-cream hover:file:bg-sea"
           />
           <p className="my-4 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-navy/40">or paste it</p>
           <textarea

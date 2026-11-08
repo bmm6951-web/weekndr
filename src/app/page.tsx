@@ -45,8 +45,8 @@ export default async function Home() {
       <main>
         {/* Hero */}
         <section className="mx-auto max-w-6xl px-6 pt-12 md:px-10 md:pt-16">
-          <h1 className="font-serif text-[15vw] leading-[0.85] tracking-tight text-stamp md:text-[9.5rem]">
-            your semester abroad, <em>all in one place.</em>
+          <h1 className="font-serif text-[15vw] leading-[0.85] tracking-tight text-navy md:text-[9.5rem]">
+            your semester abroad, <em className="text-stamp">all in one place.</em>
           </h1>
           <div className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-navy/15 pt-6">
             <p className="max-w-md font-mono text-xs uppercase leading-6 tracking-[0.15em] text-navy-soft">
@@ -102,12 +102,18 @@ export default async function Home() {
         </section>
 
         {/* Sample plan */}
-        <section className="bg-oxblood py-24 text-cream md:py-32">
+        <section className="bg-sea py-24 text-cream md:py-32">
           <div className="mx-auto max-w-6xl px-6 md:px-10">
-            <h2 className="font-serif text-6xl leading-[0.9] md:text-8xl">
-              a semester <em>in Barcelona</em>
+            <p className="flex justify-between font-mono text-[11px] uppercase tracking-[0.2em] text-cream/70">
+              <span>Sample plan</span>
+              <span>Spring semester</span>
+            </p>
+            <h2
+              className="photo-text mt-4 font-poster text-[21vw] uppercase leading-[0.85] md:text-[12.5rem]"
+              style={{ backgroundImage: `url("${photos.beach}"), linear-gradient(135deg, #d3e4e6, #bf5a32)` }}
+            >
+              Barcelona
             </h2>
-            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-cream/60">Sample plan</p>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
               {sample.map((s) => (
                 <figure key={s.wk}>
@@ -122,17 +128,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Founder */}
-        <section className="mx-auto max-w-3xl px-6 py-24 text-center md:py-32">
-          <p className="eyebrow">From the founder</p>
-          <p className="mt-6 font-serif text-4xl leading-tight md:text-5xl">
-            &ldquo;I&apos;m studying abroad in Barcelona next semester, and I don&apos;t want to waste a single
-            weekend. <em>Neither should you.</em>&rdquo;
-          </p>
-          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-navy-soft">
-            Bhavya Mudduluri, Founder
-          </p>
-        </section>
 
         {/* Pricing */}
         <section id="pricing" className="border-t border-navy/15 py-24 md:py-32">

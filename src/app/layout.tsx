@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Mono, Instrument_Serif, Jost } from "next/font/google";
+import { Anton, DM_Mono, Instrument_Serif, Jost } from "next/font/google";
 import "./globals.css";
 
 const instrument = Instrument_Serif({
@@ -7,6 +7,12 @@ const instrument = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
+});
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const jost = Jost({
@@ -35,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${instrument.variable} ${jost.variable} ${dmMono.variable} font-sans antialiased`}
+        className={`${instrument.variable} ${anton.variable} ${jost.variable} ${dmMono.variable} font-sans antialiased`}
       >
         {children}
       </body>

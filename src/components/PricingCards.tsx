@@ -23,7 +23,7 @@ export default function PricingCards({ user }: { user: User | null }) {
         </Link>
       </div>
 
-      <div className="flex flex-col rounded-sm bg-stamp p-8 text-cream">
+      <div className="flex flex-col rounded-sm bg-sea p-8 text-cream">
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cream/75">Weekndr Plus</p>
         <p className="mt-2 font-serif text-7xl">
           $7.99<span className="font-mono text-xs uppercase tracking-[0.2em] text-cream/75"> / month</span>
@@ -39,12 +39,12 @@ export default function PricingCards({ user }: { user: User | null }) {
           </p>
         ) : user ? (
           <form action={startCheckout} className="mt-8">
-            <button className="w-full rounded-full bg-cream px-7 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-stamp transition hover:bg-white">
+            <button className="w-full rounded-full bg-cream px-7 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-sea transition hover:bg-white">
               Upgrade
             </button>
           </form>
         ) : (
-          <Link href="/signup" className="mt-8 rounded-full bg-cream px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] text-stamp transition hover:bg-white">
+          <Link href="/signup" className="mt-8 rounded-full bg-cream px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] text-sea transition hover:bg-white">
             Get started
           </Link>
         )}

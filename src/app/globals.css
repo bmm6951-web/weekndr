@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
-/* Weekndr palette: warm cream, navy ink, Mediterranean tomato red, soft sea blue */
+/* Weekndr palette: warm stone, deep Mediterranean sea, terracotta rooftops */
 @theme inline {
-  --color-cream: #f4ede2;
-  --color-cream-dark: #e9dfcf;
-  --color-sky: #cfdde6;
-  --color-sky-deep: #8fb0c4;
-  --color-navy: #1b2338;
-  --color-navy-soft: #4a5166;
-  --color-stamp: #c2412d;
-  --color-oxblood: #6b1e19;
+  --color-cream: #eeeae3;
+  --color-cream-dark: #e2dacd;
+  --color-sky: #d3e4e6;
+  --color-sky-deep: #7faab3;
+  --color-navy: #13303a;
+  --color-navy-soft: #4d6168;
+  --color-stamp: #bf5a32;
+  --color-sea: #0f4c5c;
 
   --font-serif: var(--font-instrument), "Georgia", serif;
   --font-sans: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
   --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+  --font-poster: var(--font-anton), Impact, sans-serif;
 }
 
 html {
@@ -41,7 +42,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply inline-block rounded-full bg-stamp px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] text-cream transition hover:bg-oxblood disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-block rounded-full bg-stamp px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] text-cream transition hover:bg-sea disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-ghost {
     @apply inline-block rounded-full border border-navy/25 px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] transition hover:border-navy;
@@ -67,6 +68,12 @@ body {
   /* Warm, slightly faded "film" look for photos */
   .film {
     filter: sepia(0.18) saturate(0.92) contrast(0.96) brightness(1.02);
+  }
+  /* Photo showing through giant letters, like a travel poster */
+  .photo-text {
+    @apply bg-cover bg-center text-transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
   }
   .marquee {
     animation: marquee 40s linear infinite;

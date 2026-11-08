@@ -97,7 +97,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
         </ol>
 
         {result.money_tips.length > 0 && (
-          <section className="mt-16 rounded-sm bg-oxblood p-8 text-cream md:p-12">
+          <section className="mt-16 rounded-sm bg-sea p-8 text-cream md:p-12">
             <h2 className="font-serif text-5xl">money tips</h2>
             <ul className="mt-6 grid gap-4 md:grid-cols-2">
               {result.money_tips.map((tip) => (
