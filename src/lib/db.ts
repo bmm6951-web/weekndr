@@ -54,6 +54,21 @@ async function setupSchema() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS plans_user_id_idx ON plans(user_id);
+    CREATE TABLE IF NOT EXISTS price_trackers (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      plan_id INTEGER NOT NULL REFERENCES plans(id) ON DELETE CASCADE,
+      weekend_index INTEGER NOT NULL,
+      alerts_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+      flight JSONB,
+      stays JSONB,
+      flight_price NUMERIC,
+      stay_price NUMERIC,
+      prev_flight_price NUMERIC,
+      prev_stay_price NUMERIC,
+      checked_at TIMESTAMPTZ,
+      UNIQUE (plan_id, weekend_index)
+    );
   `);
 
   const demo = await pool.query("SELECT password_hash FROM users WHERE email = $1", [DEMO_EMAIL]);

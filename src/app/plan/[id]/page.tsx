@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import PriceTracker, { type TrackerData } from "@/components/PriceTracker";
 import PrintButton from "@/components/PrintButton";
 import SemesterCalendar from "@/components/SemesterCalendar";
 import SiteFooter from "@/components/SiteFooter";
@@ -7,6 +8,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { flightLinks, groundLinks, stayLinks, type LinkItem } from "@/lib/links";
+import { getTrackers } from "@/lib/trackers";
 import { withDates, type PlanInput, type PlanResult, type PlanWeekend } from "@/lib/planner";
 
 const SYMBOLS = { USD: "$", EUR: "€", GBP: "£" } as const;
@@ -55,6 +57,21 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
   if (rows.length === 0) notFound();
   const { input } = rows[0];
   const result = withDates(input, rows[0].result);
+  const trackers = new Map<number, TrackerData>(
+    (await getTrackers(Number(id))).map((t) => [
+      t.weekend_index,
+      {
+        alerts_enabled: t.alerts_enabled,
+        flight: t.flight,
+        stays: t.stays,
+        flight_price: t.flight_price,
+        stay_price: t.stay_price,
+        prev_flight_price: t.prev_flight_price,
+        prev_stay_price: t.prev_stay_price,
+        checked_at: t.checked_at ? new Date(t.checked_at).toISOString() : null,
+      },
+    ]),
+  );
   const sym = SYMBOLS[input.currency] ?? "$";
   const money = (n: number) => `${sym}${Math.round(n).toLocaleString("en-US")}`;
   const trips = result.weekends.filter((w) => w.type === "trip" || w.type === "long_trip");
@@ -141,6 +158,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
                     )}
                     {w.where_to_stay && <p className="mt-3 text-xs leading-relaxed text-navy-soft">{w.where_to_stay}</p>}
                     <LinkRow title="Where to stay" links={stayLinks(w.destination, w.country, w.start_date!, w.end_date!)} />
+                    <PriceTracker planId={Number(id)} index={w.index} sym={sym} isPaid={user.is_paid} initial={trackers.get(w.index) ?? null} />
                   </div>
                 )}
               </li>
