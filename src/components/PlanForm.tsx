@@ -99,7 +99,7 @@ export default function PlanForm() {
             {INTERESTS.map((interest) => (
               <label key={interest} className="cursor-pointer">
                 <input type="checkbox" name="interests" value={interest} className="peer sr-only" />
-                <span className="inline-block rounded-full border border-navy/15 bg-white/60 px-4 py-2 text-sm transition peer-checked:border-navy peer-checked:bg-navy peer-checked:text-cream peer-focus-visible:ring-2 peer-focus-visible:ring-sky-deep">
+                <span className="inline-block rounded-full border border-navy/15 bg-white/60 px-4 py-2 text-sm transition peer-checked:border-stamp peer-checked:bg-stamp peer-checked:text-cream peer-focus-visible:ring-2 peer-focus-visible:ring-sky-deep">
                   {interest}
                 </span>
               </label>
@@ -114,7 +114,7 @@ export default function PlanForm() {
             {STYLES.map((style, i) => (
               <label key={style} className="cursor-pointer">
                 <input type="radio" name="travelStyle" value={style} defaultChecked={i === 1} className="peer sr-only" />
-                <span className="block h-full rounded-2xl border border-navy/15 bg-white/60 p-4 text-sm transition peer-checked:border-navy peer-checked:bg-sky/60 peer-focus-visible:ring-2 peer-focus-visible:ring-sky-deep">
+                <span className="block h-full rounded-sm border border-navy/15 bg-white/60 p-4 text-sm transition peer-checked:border-stamp peer-checked:bg-stamp peer-checked:text-cream peer-focus-visible:ring-2 peer-focus-visible:ring-sky-deep">
                   {style}
                 </span>
               </label>
@@ -122,18 +122,15 @@ export default function PlanForm() {
           </div>
         </section>
 
-        <section className="rounded-3xl border-2 border-dashed border-navy/15 p-6">
+        <section className="rounded-sm border border-dashed border-navy/25 p-6">
           <p className="label">Your academic calendar</p>
-          <p className="mb-5 text-sm font-light text-navy-soft">
-            Upload your program&apos;s calendar or syllabus as a PDF, or paste the dates below. Weekndr reads it to find
-            exams, breaks, and required trips. (Optional, but your plan is much better with it.)
-          </p>
+          <p className="mb-5 text-sm font-light text-navy-soft">PDF or pasted text. Optional, but recommended.</p>
           <input
             name="calendarFile"
             type="file"
             accept="application/pdf"
             aria-label="Upload academic calendar PDF"
-            className="block w-full text-sm text-navy-soft file:mr-4 file:rounded-full file:border-0 file:bg-navy file:px-5 file:py-2.5 file:text-sm file:text-cream hover:file:bg-navy-soft"
+            className="block w-full text-sm text-navy-soft file:mr-4 file:rounded-full file:border-0 file:bg-stamp file:px-5 file:py-2.5 file:text-sm file:text-cream hover:file:bg-oxblood"
           />
           <p className="my-4 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-navy/40">or paste it</p>
           <textarea
@@ -146,10 +143,10 @@ export default function PlanForm() {
       </fieldset>
 
       {error && (
-        <div role="alert" className="rounded-2xl bg-stamp/10 px-5 py-4 text-sm text-stamp">
+        <div role="alert" className="rounded-sm bg-stamp/10 px-5 py-4 text-sm text-stamp">
           {error.message}{" "}
           {error.upgrade && (
-            <Link href="/pricing" className="font-medium underline underline-offset-4">
+            <Link href="/pricing" className="underline underline-offset-4">
               See Weekndr Plus
             </Link>
           )}
@@ -164,11 +161,11 @@ export default function PlanForm() {
           </span>
           <div>
             <p className="font-serif text-2xl">{LOADING_MESSAGES[step]}</p>
-            <p className="text-sm text-navy-soft">Building a full semester takes about a minute. Keep this tab open.</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-navy-soft">About a minute · keep this tab open</p>
           </div>
         </div>
       ) : (
-        <button className="btn-primary w-full sm:w-auto">Plan my semester →</button>
+        <button className="btn-primary w-full sm:w-auto">Plan my semester</button>
       )}
     </form>
   );

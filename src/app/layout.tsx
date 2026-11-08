@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Caveat, Cormorant_Garamond, DM_Mono, Jost } from "next/font/google";
+import { DM_Mono, Instrument_Serif, Jost } from "next/font/google";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400",
   style: ["normal", "italic"],
 });
 
@@ -13,12 +13,6 @@ const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
   weight: ["300", "400", "500"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["500", "700"],
 });
 
 const dmMono = DM_Mono({
@@ -41,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${cormorant.variable} ${jost.variable} ${caveat.variable} ${dmMono.variable} font-sans antialiased`}
+        className={`${instrument.variable} ${jost.variable} ${dmMono.variable} font-sans antialiased`}
       >
         {children}
       </body>

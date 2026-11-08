@@ -1,19 +1,22 @@
-import { Logo } from "./SiteHeader";
+import Link from "next/link";
 
 export default function SiteFooter() {
   return (
-    <footer className="bg-cream-dark">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-10">
-        <div>
-          <Logo />
-          <p className="mt-2 text-sm text-navy-soft">Your semester abroad, all in one place.</p>
-        </div>
-        <div className="text-sm text-navy-soft md:text-right">
+    <footer className="overflow-hidden bg-navy text-cream">
+      <div className="mx-auto max-w-6xl px-6 pt-14 md:px-10">
+        <div className="flex flex-wrap justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.2em] text-cream/70">
           <p>
-            Created by <span className="font-medium text-navy">Bhavya Mudduluri</span>
+            Created by <span className="text-cream">Bhavya Mudduluri</span> · Penn State
           </p>
-          <p className="mt-1">Penn State · &copy; {new Date().getFullYear()} Weekndr</p>
+          <div className="flex gap-6">
+            <Link href="/#how-it-works" className="hover:text-cream">How it works</Link>
+            <Link href="/pricing" className="hover:text-cream">Pricing</Link>
+            <Link href="/login" className="hover:text-cream">Log in</Link>
+          </div>
         </div>
+        <p className="mt-8 select-none font-serif text-[23vw] leading-[0.75] tracking-tight md:text-[15rem]">
+          weekndr<span className="text-stamp">.</span>
+        </p>
       </div>
     </footer>
   );

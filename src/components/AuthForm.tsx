@@ -34,14 +34,14 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
         {isSignup && <p className="mt-2 text-xs text-navy-soft">At least 8 characters.</p>}
       </div>
       {state.error && (
-        <p role="alert" className="rounded-xl bg-stamp/10 px-4 py-3 text-sm text-stamp">{state.error}</p>
+        <p role="alert" className="rounded-sm bg-stamp/10 px-4 py-3 text-sm text-stamp">{state.error}</p>
       )}
       <button className="btn-primary w-full" disabled={pending}>
         {pending ? "One moment…" : isSignup ? "Create my account" : "Log in"}
       </button>
       <p className="text-center text-sm text-navy-soft">
         {isSignup ? "Already have an account? " : "New to Weekndr? "}
-        <Link href={isSignup ? "/login" : "/signup"} className="font-medium text-navy underline underline-offset-4">
+        <Link href={isSignup ? "/login" : "/signup"} className="text-stamp underline underline-offset-4">
           {isSignup ? "Log in" : "Create an account"}
         </Link>
       </p>

@@ -30,14 +30,13 @@ export default async function BillingSuccess({
     <>
       <SiteHeader user={{ ...user, is_paid: confirmed }} />
       <main className="mx-auto max-w-xl px-6 py-24 text-center">
-        <p className="stamp mx-auto mb-8 w-fit">{confirmed ? "Approved" : "Pending"}</p>
-        <h1 className="font-serif text-5xl font-medium">
+                <h1 className="font-serif text-6xl">
           {confirmed ? "Welcome to Weekndr Plus." : "We couldn't confirm your payment."}
         </h1>
         <p className="mt-6 text-lg font-light text-navy-soft">
           {confirmed
-            ? "Unlimited semester plans are unlocked. Time to plan every weekend."
-            : "If you completed checkout, refresh this page in a moment. Otherwise, head back to pricing to try again."}
+            ? "Unlimited semester plans are unlocked."
+            : "If you completed checkout, refresh this page in a moment."}
         </p>
         <Link href={confirmed ? "/plan/new" : "/pricing"} className="btn-primary mt-10 inline-block">
           {confirmed ? "Plan my semester" : "Back to pricing"}

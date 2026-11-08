@@ -9,9 +9,9 @@ type PhotoProps = {
 };
 
 const tones = {
-  sky: "linear-gradient(135deg, #cfe0ec 0%, #9dbcd4 100%)",
-  navy: "linear-gradient(135deg, #2c3b5c 0%, #16233f 100%)",
-  cream: "linear-gradient(135deg, #efe6d6 0%, #cfe0ec 100%)",
+  sky: "linear-gradient(135deg, #cfdde6 0%, #8fb0c4 100%)",
+  navy: "linear-gradient(135deg, #4a5166 0%, #1b2338 100%)",
+  cream: "linear-gradient(135deg, #e9dfcf 0%, #d9b9a0 100%)",
 };
 
 export default function Photo({ src, alt, className = "", tone = "sky" }: PhotoProps) {
@@ -19,7 +19,7 @@ export default function Photo({ src, alt, className = "", tone = "sky" }: PhotoP
     <div
       role="img"
       aria-label={alt}
-      className={`bg-cover bg-center ${className}`}
+      className={`film bg-cover bg-center ${className}`}
       style={{ backgroundImage: `url("${src}"), ${tones[tone]}` }}
     />
   );

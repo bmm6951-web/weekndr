@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
-/* Weekndr brand palette: soft cream, light blue, navy, plus a passport-stamp red */
+/* Weekndr palette: warm cream, navy ink, Mediterranean tomato red, soft sea blue */
 @theme inline {
-  --color-cream: #f8f3ea;
-  --color-cream-dark: #efe6d6;
-  --color-sky: #cfe0ec;
-  --color-sky-deep: #9dbcd4;
-  --color-navy: #16233f;
-  --color-navy-soft: #2c3b5c;
-  --color-stamp: #c4553f;
+  --color-cream: #f4ede2;
+  --color-cream-dark: #e9dfcf;
+  --color-sky: #cfdde6;
+  --color-sky-deep: #8fb0c4;
+  --color-navy: #1b2338;
+  --color-navy-soft: #4a5166;
+  --color-stamp: #c2412d;
+  --color-oxblood: #6b1e19;
 
-  --font-serif: var(--font-cormorant), "Georgia", serif;
+  --font-serif: var(--font-instrument), "Georgia", serif;
   --font-sans: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
-  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
   --font-mono: var(--font-dm-mono), ui-monospace, monospace;
 }
 
@@ -26,55 +26,54 @@ body {
 }
 
 ::selection {
-  background: var(--color-sky);
-  color: var(--color-navy);
+  background: var(--color-stamp);
+  color: var(--color-cream);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply rounded-full bg-navy px-7 py-3.5 text-center text-sm tracking-wide text-cream transition hover:bg-navy-soft disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-block rounded-full bg-stamp px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] text-cream transition hover:bg-oxblood disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-ghost {
-    @apply rounded-full border border-navy/20 px-7 py-3.5 text-center text-sm tracking-wide transition hover:border-navy/50;
+    @apply inline-block rounded-full border border-navy/25 px-7 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em] transition hover:border-navy;
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.25em] text-stamp;
   }
   .field {
-    @apply w-full rounded-xl border border-navy/15 bg-white/70 px-4 py-3 text-base text-navy outline-none transition placeholder:text-navy/35 focus:border-navy/50 focus:bg-white;
+    @apply w-full rounded-lg border border-navy/15 bg-white/60 px-4 py-3 text-base text-navy outline-none transition placeholder:text-navy/35 focus:border-navy/50 focus:bg-white;
   }
   .label {
     @apply mb-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-navy-soft;
   }
-  /* A rotated, double-bordered passport stamp */
   .stamp {
-    @apply inline-block -rotate-6 rounded-md border-2 border-stamp px-3 py-1 font-mono text-xs font-medium uppercase tracking-[0.25em] text-stamp;
-    box-shadow: inset 0 0 0 2px var(--color-cream), inset 0 0 0 3px var(--color-stamp);
+    @apply inline-block rounded-full border border-stamp px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-stamp;
   }
-  /* Boarding-pass card with a perforated tear line */
   .ticket {
-    @apply relative overflow-hidden rounded-3xl bg-white shadow-xl shadow-navy/10;
+    @apply relative overflow-hidden rounded-xl border border-navy/10 bg-white/55;
   }
   .ticket-perf {
-    @apply relative border-t-2 border-dashed border-navy/15;
+    @apply border-t border-navy/10;
   }
-  .ticket-perf::before,
-  .ticket-perf::after {
-    content: "";
-    @apply absolute -top-3 h-6 w-6 rounded-full bg-cream;
+  /* Warm, slightly faded "film" look for photos */
+  .film {
+    filter: sepia(0.18) saturate(0.92) contrast(0.96) brightness(1.02);
   }
-  .ticket-perf::before {
-    @apply -left-3;
+  .marquee {
+    animation: marquee 40s linear infinite;
   }
-  .ticket-perf::after {
-    @apply -right-3;
-  }
-  .barcode {
-    background: repeating-linear-gradient(
-      90deg,
-      var(--color-navy) 0 2px,
-      transparent 2px 4px,
-      var(--color-navy) 4px 5px,
-      transparent 5px 8px,
-      var(--color-navy) 8px 11px,
-      transparent 11px 12px
-    );
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      animation: none;
+    }
   }
 }
