@@ -21,6 +21,7 @@ export default function SiteHeader({ user }: { user: User | null }) {
           {user ? (
             <>
               <Link href="/dashboard" className={`${link} hidden sm:inline`}>My plans</Link>
+              <Link href="/community" className={`${link} hidden sm:inline`}>Reviews</Link>
               {!user.is_paid && <Link href="/pricing" className={`${link} !text-stamp`}>Upgrade</Link>}
               <Link href="/plan/new" className={link}>New plan</Link>
               <form action={logout}>
@@ -30,6 +31,7 @@ export default function SiteHeader({ user }: { user: User | null }) {
           ) : (
             <>
               <Link href="/#how-it-works" className={`${link} hidden md:inline`}>How it works</Link>
+              <Link href="/community" className={`${link} hidden md:inline`}>Reviews</Link>
               <Link href="/pricing" className={`${link} hidden md:inline`}>Pricing</Link>
               <Link href="/login" className={link}>Log in</Link>
               <Link href="/signup" className="btn-primary !px-5 !py-2.5">Get started</Link>

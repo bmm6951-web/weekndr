@@ -76,6 +76,63 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Product */}
+        <section className="bg-cream-dark/60 py-24 md:py-32">
+          <div className="mx-auto max-w-6xl px-6 md:px-10">
+            <p className="eyebrow">The product</p>
+            <h2 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] md:text-7xl">
+              every weekend, <em className="text-stamp">planned and bookable.</em>
+            </h2>
+            <figure className="mt-12">
+              <div className="overflow-hidden rounded-md border border-navy/15 bg-cream shadow-2xl shadow-navy/15">
+                <div className="flex gap-1.5 border-b border-navy/10 px-4 py-3">
+                  <span className="h-2.5 w-2.5 rounded-full bg-navy/15" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-navy/15" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-navy/15" />
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/product/cards.webp" alt="Weekndr plan cards for Barcelona, Valencia, and Lisbon with costs, book-by dates, and booking links" className="w-full" loading="lazy" />
+              </div>
+              <figcaption className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-navy-soft">
+                Sample plan · each trip with cost, book-by date, flights, safe places to stay, and live prices
+              </figcaption>
+            </figure>
+            <div className="mt-16 grid items-center gap-12 md:grid-cols-[1.3fr_1fr]">
+              <figure>
+                <div className="overflow-hidden rounded-md border border-navy/15 bg-cream shadow-xl shadow-navy/10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/product/calendar.webp" alt="Weekndr semester calendar with weekends colored by trip type" className="w-full" loading="lazy" />
+                </div>
+                <figcaption className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-navy-soft">
+                  Your semester at a glance · syncs to Google, Apple, or Outlook
+                </figcaption>
+              </figure>
+              <div>
+                <h3 className="font-serif text-4xl leading-tight md:text-5xl">
+                  why not just <em className="text-stamp">ask a chatbot?</em>
+                </h3>
+                <ul className="mt-6">
+                  {[
+                    "Reads your actual academic calendar",
+                    "Real reviews from students in your city",
+                    "Live flight & hostel prices",
+                    "Emails you when prices drop",
+                    "Book-by reminders in your calendar",
+                  ].map((item) => (
+                    <li key={item} className="flex gap-3 border-t border-navy/15 py-3 font-mono text-[11px] uppercase tracking-[0.18em]">
+                      <span className="text-stamp">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/community" className="mt-6 inline-block font-mono text-[11px] uppercase tracking-[0.2em] text-stamp hover:underline">
+                  Read student trip reviews →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Marquee */}
         <div className="overflow-hidden border-y border-navy/15 py-6" aria-hidden>
           <div className="marquee flex w-max gap-12 whitespace-nowrap font-serif text-6xl md:text-8xl">

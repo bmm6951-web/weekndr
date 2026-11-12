@@ -69,6 +69,26 @@ async function setupSchema() {
       checked_at TIMESTAMPTZ,
       UNIQUE (plan_id, weekend_index)
     );
+    CREATE TABLE IF NOT EXISTS trip_reviews (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      home_city TEXT NOT NULL,
+      home_key TEXT NOT NULL,
+      destination TEXT NOT NULL,
+      dest_key TEXT NOT NULL,
+      country TEXT NOT NULL DEFAULT '',
+      rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+      safety INTEGER NOT NULL CHECK (safety BETWEEN 1 AND 5),
+      vibe TEXT NOT NULL,
+      tags TEXT[] NOT NULL DEFAULT '{}',
+      cost NUMERIC,
+      currency TEXT NOT NULL DEFAULT 'EUR',
+      trip_month TEXT,
+      body TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (user_id, home_key, dest_key)
+    );
+    CREATE INDEX IF NOT EXISTS trip_reviews_home_idx ON trip_reviews(home_key);
   `);
 
   const demo = await pool.query("SELECT password_hash FROM users WHERE email = $1", [DEMO_EMAIL]);

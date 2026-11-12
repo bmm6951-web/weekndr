@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { startCheckout } from "@/app/actions/billing";
 import type { User } from "@/lib/auth";
+import { DEMO_EMAIL } from "@/lib/db";
 
 const FREE = ["1 semester plan", "Every weekend planned", "Cost estimates"];
 const PLUS = ["Unlimited semester plans", "Re-plan anytime", "New features first"];
@@ -33,7 +34,16 @@ export default function PricingCards({ user }: { user: User | null }) {
             <li key={f} className={`${item} border-cream/25`}>{f}</li>
           ))}
         </ul>
-        {user?.is_paid ? (
+        {user?.email === DEMO_EMAIL ? (
+          <form action={startCheckout} className="mt-8">
+            <button className="w-full rounded-full bg-cream px-7 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-sea transition hover:bg-white">
+              Try Stripe checkout
+            </button>
+            <p className="mt-3 text-center text-xs text-cream/75">
+              Demo account: already on Plus. Use test card 4242 4242 4242 4242.
+            </p>
+          </form>
+        ) : user?.is_paid ? (
           <p className="mt-8 rounded-full border border-cream/40 py-3.5 text-center font-mono text-xs uppercase tracking-[0.2em]">
             You&apos;re on Plus
           </p>

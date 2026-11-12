@@ -15,6 +15,8 @@ const INTERESTS = [
   "Festivals",
   "Photography",
   "Hidden gems",
+  "Safety first",
+  "Quiet & chill",
 ];
 
 const STYLES = [

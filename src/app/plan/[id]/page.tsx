@@ -8,6 +8,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { flightLinks, groundLinks, stayLinks, type LinkItem } from "@/lib/links";
+import { cityKey, reviewSummaries, VIBES } from "@/lib/reviews";
 import { getTrackers } from "@/lib/trackers";
 import { withDates, type PlanInput, type PlanResult, type PlanWeekend } from "@/lib/planner";
 
@@ -57,6 +58,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
   if (rows.length === 0) notFound();
   const { input } = rows[0];
   const result = withDates(input, rows[0].result);
+  const reviews = await reviewSummaries(cityKey(input.homeCity));
   const trackers = new Map<number, TrackerData>(
     (await getTrackers(Number(id))).map((t) => [
       t.weekend_index,
@@ -117,6 +119,8 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
             const isTrip = w.type === "trip" || w.type === "long_trip";
             const hasDates = Boolean(w.start_date && w.end_date);
             const flies = w.transport_mode === "flight" && w.origin_airport && w.destination_airport;
+            const said = isTrip ? reviews.get(cityKey(w.destination)) : undefined;
+            const rateHref = `/community/new?${new URLSearchParams({ from: input.homeCity, to: w.destination, country: w.country })}`;
             return (
               <li key={w.index} className={`ticket flex break-inside-avoid flex-col ${style.card}`}>
                 <div className={`flex items-center justify-between border-b border-navy/10 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] ${style.bar}`}>
@@ -131,6 +135,14 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
                   </h2>
                   <p className="mt-2 font-serif text-xl italic text-stamp">{w.headline}</p>
                   <p className="mt-3 text-sm leading-relaxed text-navy-soft">{w.why_it_fits}</p>
+                  {said && (
+                    <div className="mt-4 rounded-sm bg-sky/40 p-3 text-xs">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-sea">
+                        Students say · {said.rating}/5 · safety {said.safety}/5 · {VIBES[said.vibe]} · {said.count} {said.count === 1 ? "review" : "reviews"}
+                      </p>
+                      <p className="mt-1.5 leading-relaxed">&ldquo;{said.quote.length > 160 ? `${said.quote.slice(0, 157)}…` : said.quote}&rdquo; — {said.author}</p>
+                    </div>
+                  )}
                   {w.type !== "blocked" && w.getting_there && w.getting_there !== "N/A" && (
                     <p className="mt-3 text-sm">
                       <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-navy-soft">Getting there · </span>
@@ -158,6 +170,9 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
                     )}
                     {w.where_to_stay && <p className="mt-3 text-xs leading-relaxed text-navy-soft">{w.where_to_stay}</p>}
                     <LinkRow title="Where to stay" links={stayLinks(w.destination, w.country, w.start_date!, w.end_date!)} />
+                    <Link href={rateHref} className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.2em] text-stamp hover:underline">
+                      Been here? Rate this trip →
+                    </Link>
                     <PriceTracker planId={Number(id)} index={w.index} sym={sym} isPaid={user.is_paid} initial={trackers.get(w.index) ?? null} />
                   </div>
                 )}

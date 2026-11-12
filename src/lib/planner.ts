@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { cityKey, reviewsForPrompt } from "./reviews";
 
 // The model that powers the semester planner. Change it here to swap models.
 export const PLANNER_MODEL = "claude-opus-5-5";
@@ -124,7 +125,7 @@ const PLAN_SCHEMA = {
 
 const SYMBOLS = { USD: "$", EUR: "€", GBP: "£" } as const;
 
-function buildPrompt(input: PlanInput, weekends: Weekend[], hasPdf: boolean) {
+function buildPrompt(input: PlanInput, weekends: Weekend[], hasPdf: boolean, studentReviews: string) {
   const sym = SYMBOLS[input.currency];
   const budgetLine = input.totalBudget
     ? `Total travel budget for the whole semester: ${sym}${input.totalBudget} (${input.currency}), covering transport, lodging, food, and activities`
@@ -151,6 +152,9 @@ Today's date: ${new Date().toISOString().slice(0, 10)}
 ## Academic calendar
 ${calendarNote}
 
+## What real students studying in ${input.homeCity} said about their weekend trips
+${studentReviews || "No student reviews yet for this city."}
+
 ## Every weekend of the semester (plan all of them, in this order, copying index and label exactly)
 ${weekends.map((w) => `${w.index}. ${w.label}`).join("\n")}
 
@@ -167,6 +171,7 @@ ${weekends.map((w) => `${w.index}. ${w.label}`).join("\n")}
 - Prefer destinations reachable by budget flights, trains, or buses from ${input.homeCity}, with realistic travel times. Factor in season and weather for the dates.
 - Tie every recommendation to this student's interests. Be specific: name neighborhoods, foods, viewpoints, or free activities.
 - All costs are estimates in ${input.currency}; round to whole numbers. Don't invent specific event dates or exact prices.
+- Use the student reviews above as real-world evidence: favor highly rated trips, respect safety scores, and match each trip's vibe to this student (e.g. if they want safety or calm weekends, avoid nightlife-heavy picks). When a review shaped a pick, say so briefly in why_it_fits (e.g. "students from Barcelona rate it 4.8/5"). Only cite the reviews listed; never invent student opinions.
 - Write in a warm, practical voice, like a friend who has studied abroad. Keep each field concise.`;
 }
 
@@ -188,7 +193,8 @@ export async function generatePlan(input: PlanInput, pdfBase64?: string): Promis
       source: { type: "base64", media_type: "application/pdf", data: pdfBase64 },
     });
   }
-  content.push({ type: "text", text: buildPrompt(input, weekends, Boolean(pdfBase64)) });
+  const studentReviews = await reviewsForPrompt(cityKey(input.homeCity)).catch(() => "");
+  content.push({ type: "text", text: buildPrompt(input, weekends, Boolean(pdfBase64), studentReviews) });
 
   let response: Anthropic.Beta.BetaMessage;
   try {
