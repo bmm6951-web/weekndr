@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PriceTracker, { type TrackerData } from "@/components/PriceTracker";
 import PrintButton from "@/components/PrintButton";
+import WeekendActions from "@/components/WeekendActions";
 import SemesterCalendar from "@/components/SemesterCalendar";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -157,6 +158,13 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
                   </div>
                   {w.cost_breakdown && <p className="mt-1 text-xs text-navy-soft">{w.cost_breakdown}</p>}
                   {w.tip && <p className="mt-3 border-l-2 border-stamp pl-3 text-xs leading-relaxed text-navy-soft">{w.tip}</p>}
+                  <WeekendActions
+                    planId={Number(id)}
+                    index={w.index}
+                    options={result.weekends
+                      .filter((o) => o.index !== w.index)
+                      .map((o) => ({ index: o.index, label: o.label, destination: o.destination, blocked: o.type === "blocked" }))}
+                  />
                 </div>
                 {isTrip && hasDates && (
                   <div className="ticket-perf px-6 pb-5 pt-4 print:hidden">

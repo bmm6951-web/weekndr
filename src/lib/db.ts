@@ -54,6 +54,7 @@ async function setupSchema() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS plans_user_id_idx ON plans(user_id);
+    ALTER TABLE plans ADD COLUMN IF NOT EXISTS redo_count INTEGER NOT NULL DEFAULT 0;
     CREATE TABLE IF NOT EXISTS price_trackers (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
